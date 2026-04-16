@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediScan — Medicine Analyzer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --white: #ffffff;
+      --off-white: #f7f9fc;
+      --gray-50: #f0f4f8;
+      --gray-100: #e2eaf3;
+      --gray-200: #c8d6e5;
+      --gray-400: #8fa3bc;
+      --gray-600: #4d6680;
+      --gray-700: #2e4a63;
+      --gray-900: #0f2236;
+      --primary: #1a6ef5;
+      --primary-light: #e8f0fe;
+      --primary-dark: #0d4fc4;
+      --teal: #0ca678;
+      --teal-light: #e6f8f2;
+      --amber: #e67e22;
+      --amber-light: #fef3e2;
+      --red: #e63946;
+      --red-light: #fde8ea;
+      --shadow-sm: 0 1px 3px rgba(15,34,54,0.08), 0 1px 2px rgba(15,34,54,0.06);
+      --shadow-md: 0 4px 16px rgba(15,34,54,0.10), 0 2px 6px rgba(15,34,54,0.07);
+      --shadow-lg: 0 12px 40px rgba(15,34,54,0.13), 0 4px 12px rgba(15,34,54,0.08);
+      --shadow-xl: 0 24px 60px rgba(15,34,54,0.16);
+      --radius-sm: 8px;
+      --radius: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Fraunces', serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--off-white);
+      color: var(--gray-900);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── TOPBAR ──────────────────────────────────────── */
+    .topbar {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--gray-100);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 40px;
+    }
+
+    .topbar-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, #4a9ef5 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(26,110,245,0.3);
+      flex-shrink: 0;
+    }
+
+    .logo-text-wrap { display: flex; flex-direction: column; gap: 1px; }
+
+    .logo-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: -0.3px;
+      line-height: 1;
+    }
+
+    .logo-tagline {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      line-height: 1;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-link {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray-600);
+      text-decoration: none;
+      transition: all 0.18s;
+    }
+
+    .nav-link:hover { background: var(--gray-50); color: var(--gray-900); }
+    .nav-link.active { background: var(--primary-light); color: var(--primary); }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--teal-light);
+      color: var(--teal);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--teal);
+      animation: statusPulse 2.5s ease infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.75); opacity: 0.6; }
+    }
+
+    /* ─── HERO SECTION ────────────────────────────────── */
+    .hero-section {
+      background: linear-gradient(160deg, #f0f6ff 0%, #ffffff 45%, #f0faf6 100%);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 72px 40px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -60px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(26,110,245,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(12,166,120,0.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(26,110,245,0.15);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -1.5px;
+      color: var(--gray-900);
+      margin-bottom: 20px;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--primary);
+    }
+
+    .hero-p {
+      font-size: 16.5px;
+      color: var(--gray-600);
+      line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+
+    .hero-features {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .feature-check {
+      width: 22px; height: 22px;
+      background: var(--teal-light);
+      color: var(--teal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Stats panel in hero */
+    .hero-stats {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      padding: 32px;
+      border: 1px solid var(--gray-100);
+    }
+
+    .hero-stats-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-50);
+    }
+
+    .stat-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .stat-item:first-of-type { padding-top: 0; }
+
+    .stat-label-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .stat-icon-sm {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .stat-icon-sm.blue { background: var(--primary-light); color: var(--primary); }
+    .stat-icon-sm.teal { background: var(--teal-light); color: var(--teal); }
+    .stat-icon-sm.amber { background: var(--amber-light); color: var(--amber); }
+
+    .stat-value-text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    /* ─── MAIN CONTENT ────────────────────────────────── */
+    .content-area {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 56px 40px;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .section-title-lg {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+
+    /* ─── UPLOAD CARD ─────────────────────────────────── */
+    .upload-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--gray-100);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .upload-card-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .upload-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upload-card-title i { color: var(--primary); }
+
+    .upload-card-body { padding: 32px; }
+
+    .drop-zone {
+      border: 2px dashed var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 56px 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      background: var(--gray-50);
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .drop-zone:hover .upload-icon-wrap, .drop-zone.dragover .upload-icon-wrap {
+      transform: translateY(-4px);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 8px 24px rgba(26,110,245,0.35);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .upload-icon-wrap {
+      width: 72px; height: 72px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--primary);
+      margin: 0 auto 20px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .drop-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .drop-sub {
+      font-size: 14px;
+      color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+
+    .drop-formats {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .format-chip {
+      background: white;
+      border: 1px solid var(--gray-200);
+      color: var(--gray-600);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    /* Preview */
+    .preview-strip {
+      display: none;
+      margin-top: 20px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .preview-strip.visible { display: flex; }
+
+    .preview-thumb {
+      width: 80px; height: 80px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-200);
+      flex-shrink: 0;
+      background: var(--gray-100);
+    }
+
+    .preview-details { flex: 1; min-width: 0; }
+
+    .preview-filename {
+      font-weight: 700;
+      font-size: 14.5px;
+      color: var(--gray-900);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .preview-meta-text {
+      font-size: 12.5px;
+      color: var(--gray-400);
+      font-weight: 500;
+    }
+
+    .preview-clear {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-400);
+      font-size: 16px;
+      padding: 6px;
+      border-radius: 6px;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .preview-clear:hover { background: var(--gray-100); color: var(--red); }
+
+    /* ─── ANALYZE BUTTON ──────────────────────────────── */
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 28px;
+      margin-top: 20px;
+      background: var(--primary);
+      color: white;
+      font-family: var(--font-body);
+      font-size: 15.5px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.22s ease;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 16px rgba(26,110,245,0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(26,110,245,0.4);
+    }
+
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+
+    .btn-primary:disabled {
+      background: var(--gray-200);
+      color: var(--gray-400);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* ─── TIPS STRIP ──────────────────────────────────── */
+    .tips-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .tip-item {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .tip-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .tip-icon.green { background: var(--teal-light); color: var(--teal); }
+    .tip-icon.blue { background: var(--primary-light); color: var(--primary); }
+    .tip-icon.amber { background: var(--amber-light); color: var(--amber); }
+
+    .tip-text { font-size: 12.5px; color: var(--gray-600); line-height: 1.55; font-weight: 500; }
+    .tip-text strong { display: block; color: var(--gray-900); margin-bottom: 3px; font-weight: 700; font-size: 13px; }
+
+    /* ─── LOADING ─────────────────────────────────────── */
+    .loading-card {
+      display: none;
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--gray-100);
+      padding: 64px 40px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .loading-card.active { display: block; }
+
+    .loading-visual {
+      width: 96px; height: 96px;
+      margin: 0 auto 28px;
+      position: relative;
+    }
+
+    .spin-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid transparent;
+    }
+
+    .spin-track:nth-child(1) {
+      border-top-color: var(--primary);
+      animation: spinAnim 1.1s linear infinite;
+    }
+
+    .spin-track:nth-child(2) {
+      inset: 14px;
+      border-top-color: var(--teal);
+      animation: spinAnim 1.5s linear infinite reverse;
+    }
+
+    .spin-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    @keyframes spinAnim { to { transform: rotate(360deg); } }
+
+    .loading-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .loading-sub { font-size: 14px; color: var(--gray-400); font-weight: 500; }
+
+    .progress-track {
+      height: 4px;
+      background: var(--gray-100);
+      border-radius: 100px;
+      margin-top: 28px;
+      overflow: hidden;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--teal));
+      border-radius: 100px;
+      animation: progressWave 1.8s ease infinite;
+    }
+
+    @keyframes progressWave {
+      0% { width: 0%; margin-left: 0%; }
+      50% { width: 65%; margin-left: 15%; }
+      100% { width: 0%; margin-left: 100%; }
+    }
+
+    /* ─── RESULTS SECTION ─────────────────────────────── */
+    #results { display: none; }
+    #results.visible { display: block; }
+
+    .results-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .results-heading {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: -0.4px;
+    }
+
+    .results-badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(26,110,245,0.15);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* OCR Box */
+    .info-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-100);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .info-card-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gray-50);
+    }
+
+    .info-card-head i { color: var(--primary); font-size: 14px; }
+
+    .info-card-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-700);
+      letter-spacing: 0.2px;
+    }
+
+    .ocr-output {
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12.5px;
+      color: var(--gray-600);
+      white-space: pre-wrap;
+      max-height: 180px;
+      overflow-y: auto;
+      line-height: 1.8;
+      background: #fafbfc;
+    }
+
+    .ocr-output::-webkit-scrollbar { width: 5px; }
+    .ocr-output::-webkit-scrollbar-track { background: transparent; }
+    .ocr-output::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+    /* Keywords */
+    .kw-wrap {
+      padding: 16px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .kw-chip {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(26,110,245,0.15);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    /* ─── MEDICINE CARDS ──────────────────────────────── */
+    .med-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .med-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-100);
+      overflow: hidden;
+      transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+      animation: slideUp 0.4s ease both;
+    }
+
+    .med-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      border-color: rgba(26,110,245,0.2);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .med-card:nth-child(2) { animation-delay: 0.08s; }
+    .med-card:nth-child(3) { animation-delay: 0.14s; }
+    .med-card:nth-child(4) { animation-delay: 0.2s; }
+    .med-card:nth-child(5) { animation-delay: 0.26s; }
+
+    .med-card-head {
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--gray-100);
+      background: linear-gradient(135deg, #fafbfd 0%, white 100%);
+    }
+
+    .med-rank-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .rank-badge {
+      width: 38px; height: 38px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 17px;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(26,110,245,0.3);
+    }
+
+    .rank-badge.second { background: #64748b; box-shadow: 0 4px 12px rgba(100,116,139,0.3); }
+    .rank-badge.third { background: #b45309; box-shadow: 0 4px 12px rgba(180,83,9,0.3); }
+
+    .med-name-block {}
+
+    .med-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: 3px;
+      letter-spacing: -0.3px;
+    }
+
+    .med-generic {
+      font-size: 13px;
+      color: var(--gray-400);
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .score-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .score-label-sm {
+      font-size: 10.5px;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 600;
+    }
+
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .score-track {
+      width: 72px; height: 5px;
+      background: var(--gray-100);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--primary));
+      border-radius: 100px;
+      transition: width 1s ease;
+    }
+
+    .score-pct {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--teal);
+    }
+
+    .med-card-body { padding: 24px; }
+
+    /* Composition Block */
+    .composition-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+
+    .composition-box {
+      background: var(--primary-light);
+      border: 1px solid rgba(26,110,245,0.12);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 24px;
+    }
+
+    .composition-value {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+    }
+
+    /* Info Grid */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .detail-item {}
+
+    .detail-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--gray-800, #1e3a52);
+      line-height: 1.5;
+    }
+
+    .detail-value.uses { color: var(--teal); }
+    .detail-value.side-effects { color: var(--amber); }
+
+    /* Age Section */
+    .age-panel {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 4px;
+    }
+
+    .age-panel-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .age-panel-title i { color: var(--primary); }
+
+    .age-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .age-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    .age-badge.all-ages { background: var(--teal-light); border-color: rgba(12,166,120,0.2); color: var(--teal); }
+    .age-badge.adults-children { background: var(--primary-light); border-color: rgba(26,110,245,0.2); color: var(--primary); }
+    .age-badge.adults-adolescents { background: #f0ebff; border-color: rgba(112,72,232,0.2); color: #7048e8; }
+    .age-badge.adults-only { background: var(--red-light); border-color: rgba(230,57,70,0.2); color: var(--red); }
+    .age-badge.children-only { background: var(--amber-light); border-color: rgba(230,126,34,0.2); color: var(--amber); }
+
+    .min-age-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .min-age-tag strong {
+      color: var(--gray-900);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    /* Age strip */
+    .age-strip {
+      display: flex;
+      height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      gap: 2px;
+    }
+
+    .strip-seg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.3px;
+      line-height: 1.3;
+    }
+
+    .strip-seg.active { background: var(--primary); color: white; }
+    .strip-seg.warning { background: var(--red-light); color: var(--red); }
+    .strip-seg.inactive { background: var(--gray-100); color: var(--gray-400); }
+
+    .age-note {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: white;
+      border-left: 3px solid var(--primary);
+      border-radius: 0 8px 8px 0;
+      font-size: 12.5px;
+      color: var(--gray-600);
+      line-height: 1.55;
+    }
+
+    .age-note i { color: var(--primary); margin-right: 5px; }
+
+    /* Card Footer */
+    .med-card-foot {
+      padding: 14px 24px;
+      border-top: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--gray-50);
+    }
+
+    .matched-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .match-tag {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .match-tag.name { background: var(--primary-light); color: var(--primary); }
+    .match-tag.generic { background: #f0ebff; color: #7048e8; }
+    .match-tag.composition { background: var(--teal-light); color: var(--teal); }
+    .match-tag.class { background: var(--amber-light); color: var(--amber); }
+
+    .rx-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .rx-pill.rx { background: var(--red-light); color: var(--red); border: 1px solid rgba(230,57,70,0.2); }
+    .rx-pill.otc { background: var(--teal-light); color: var(--teal); border: 1px solid rgba(12,166,120,0.2); }
+
+    /* No Results */
+    .no-results-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100);
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .no-results-icon {
+      width: 72px; height: 72px;
+      background: var(--gray-50);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin: 0 auto 20px;
+    }
+
+    .no-results-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 10px;
+    }
+
+    .no-results-desc { font-size: 14.5px; color: var(--gray-400); max-width: 440px; margin: 0 auto; line-height: 1.7; }
+
+    /* ─── TOAST ───────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: white;
+      border: 1px solid rgba(230,57,70,0.2);
+      border-left: 4px solid var(--red);
+      color: var(--gray-700);
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      font-size: 13.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-width: 360px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast i { color: var(--red); font-size: 15px; flex-shrink: 0; }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: var(--gray-900);
+      color: var(--gray-400);
+      text-align: center;
+      padding: 28px 40px;
+      font-size: 13px;
+    }
+
+    footer strong { color: white; }
+
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-disclaimer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    .footer-disclaimer i { color: var(--amber); }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-stats { display: none; }
+      .tips-strip { grid-template-columns: 1fr; }
+      .topbar { padding: 0 20px; }
+      .hero-section { padding: 48px 20px 40px; }
+      .content-area { padding: 40px 20px; }
+      .nav-center { display: none; }
+      .detail-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .detail-grid { grid-template-columns: 1fr; }
+      .upload-card-body { padding: 20px; }
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--gray-100);
+      margin: 8px 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── TOP NAVIGATION ─────────────────────────────── -->
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a class="logo" href="#">
+        <div class="logo-mark">💊</div>
+        <div class="logo-text-wrap">
+          <span class="logo-name">MediScan</span>
+          <span class="logo-tagline">Medicine Intelligence</span>
+        </div>
+      </a>
+      <div class="nav-center">
+        <a href="#" class="nav-link active">Analyzer</a>
+        <a href="#" class="nav-link">Database</a>
+        <a href="#" class="nav-link">Documentation</a>
+        <a href="#about" class="nav-link">About</a>
+      </div>
+      <div class="topbar-right">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          <span id="db-count">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── HERO ───────────────────────────────────────── -->
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-badge">
+          <i class="fa-solid fa-microscope"></i>
+          OCR-Powered Analysis
+        </div>
+        <h1 class="hero-h1">Identify Any Medicine<br/>from a <em>Single Photo</em></h1>
+        <p class="hero-p">Upload a photo of any tablet, strip, or syrup label. MediScan extracts the text using Tesseract OCR, then instantly matches it against our comprehensive pharmaceutical database.</p>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+            Tesseract OCR v5.3
+          </div>
+          <div class="hero-feature">
+            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+            Pharmaceutical DB
+          </div>
+          <div class="hero-feature">
+            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+            Age Group Info
+          </div>
+          <div class="hero-feature">
+            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+            Rx/OTC Classification
+          </div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stats-title">Database Overview</div>
+        <div class="stat-item">
+          <div class="stat-label-text">
+            <div class="stat-icon-sm blue"><i class="fa-solid fa-pills"></i></div>
+            Medicines
+          </div>
+          <div class="stat-value-text" id="stat-medicines">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label-text">
+            <div class="stat-icon-sm teal"><i class="fa-solid fa-flask"></i></div>
+            Drug Classes
+          </div>
+          <div class="stat-value-text" id="stat-classes">—</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label-text">
+            <div class="stat-icon-sm amber"><i class="fa-solid fa-eye"></i></div>
+            OCR Engine
+          </div>
+          <div class="stat-value-text">5.3</div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- ── ABOUT SECTION ─────────────────────────────── -->
+<section class="content-area" id="about">
+  <div class="section-eyebrow">About MediScan</div>
+  <div class="section-title-lg">Intelligent Medicine Recognition Platform</div>
+
+  <div class="info-card">
+    <div class="info-card-head">
+      <i class="fa-solid fa-circle-info"></i>
+      <div class="info-card-label">What is MediScan?</div>
+    </div>
+    <div style="padding:20px; font-size:14.5px; color:var(--gray-600); line-height:1.8;">
+      <strong>MediScan</strong> is an advanced AI-powered medicine identification system that allows users to analyze pharmaceutical products using a single image. By leveraging <strong>Optical Character Recognition (OCR)</strong> technology, MediScan extracts text from medicine packaging and intelligently matches it against a structured pharmaceutical database.
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-head">
+      <i class="fa-solid fa-microchip"></i>
+      <div class="info-card-label">How It Works</div>
+    </div>
+    <div style="padding:20px; font-size:14.5px; color:var(--gray-600); line-height:1.8;">
+      <ul style="padding-left:18px;">
+        <li>📸 Upload an image of a medicine strip, bottle, or label</li>
+        <li>🔍 Extract text using <strong>Tesseract OCR (v5.3)</strong></li>
+        <li>🧠 Process and identify key pharmaceutical terms</li>
+        <li>💊 Match results with a curated medicine database</li>
+        <li>📊 Display ranked matches with detailed drug information</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-head">
+      <i class="fa-solid fa-flask"></i>
+      <div class="info-card-label">Key Features</div>
+    </div>
+    <div class="kw-wrap" style="padding:20px;">
+      <span class="kw-chip">OCR-Based Recognition</span>
+      <span class="kw-chip">Medicine Matching</span>
+      <span class="kw-chip">Drug Composition Insights</span>
+      <span class="kw-chip">Side Effects & Uses</span>
+      <span class="kw-chip">Age Group Recommendations</span>
+      <span class="kw-chip">Prescription Classification (Rx/OTC)</span>
+      <span class="kw-chip">Real-Time Analysis</span>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-card-head">
+      <i class="fa-solid fa-shield-heart"></i>
+      <div class="info-card-label">Disclaimer</div>
+    </div>
+    <div style="padding:20px; font-size:14px; color:var(--gray-600); line-height:1.8;">
+      MediScan is designed for informational and educational purposes only. It does not replace professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider before making any medical decisions.
+    </div>
+  </div>
+</section>
+  <!-- ── MAIN CONTENT ───────────────────────────────── -->
+  <main class="content-area">
+
+    <!-- Upload Section -->
+    <div class="section-eyebrow">Step 1 — Upload Image</div>
+    <div class="section-title-lg">Scan Your Medicine</div>
+
+    <div class="upload-card">
+      <div class="upload-card-header">
+        <div class="upload-card-title">
+          <i class="fa-solid fa-image"></i>
+          Image Upload
+        </div>
+        <span style="font-size:12.5px; color:var(--gray-400); font-weight:500;">Max 16 MB per file</span>
+      </div>
+      <div class="upload-card-body">
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="imageInput" accept="image/*" />
+          <div class="upload-icon-wrap">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div class="drop-title">Drop your medicine image here</div>
+          <div class="drop-sub">or click to browse from your device</div>
+          <div class="drop-formats">
+            <span class="format-chip">JPG</span>
+            <span class="format-chip">PNG</span>
+            <span class="format-chip">JPEG</span>
+            <span class="format-chip">BMP</span>
+            <span class="format-chip">TIFF</span>
+            <span class="format-chip">WEBP</span>
+          </div>
+        </div>
+
+        <div class="preview-strip" id="imagePreview">
+          <img src="" alt="Preview" class="preview-thumb" id="previewImg"/>
+          <div class="preview-details">
+            <div class="preview-filename" id="previewName"></div>
+            <div class="preview-meta-text" id="previewMeta"></div>
+          </div>
+          <button class="preview-clear" id="clearBtn" title="Remove image">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <button class="btn-primary" id="analyzeBtn" disabled>
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+          Analyze Medicine
+        </button>
+
+        <div class="tips-strip">
+          <div class="tip-item">
+            <div class="tip-icon green"><i class="fa-solid fa-sun"></i></div>
+            <div class="tip-text"><strong>Good Lighting</strong>Photograph in bright, even light to improve text clarity.</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon blue"><i class="fa-solid fa-camera"></i></div>
+            <div class="tip-text"><strong>Fill the Frame</strong>Get close so the label text fills most of the image.</div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-icon amber"><i class="fa-solid fa-arrows-to-dot"></i></div>
+            <div class="tip-text"><strong>Avoid Blur</strong>Hold steady or use a flat surface to prevent blurring.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-card" id="loadingOverlay">
+      <div class="loading-visual">
+        <div class="spin-track"></div>
+        <div class="spin-track"></div>
+        <div class="spin-inner">🔬</div>
+      </div>
+      <div class="loading-title">Analyzing Medicine...</div>
+      <div class="loading-sub">Extracting text with Tesseract OCR and matching against database</div>
+      <div class="progress-track">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="results">
+      <div class="results-topbar">
+        <div class="results-heading">Analysis Results</div>
+        <div class="results-badge" id="resultsCount"></div>
+      </div>
+
+      <!-- OCR Output -->
+      <div class="info-card">
+        <div class="info-card-head">
+          <i class="fa-solid fa-file-lines"></i>
+          <div class="info-card-label">Extracted Text (OCR Output)</div>
+        </div>
+        <pre class="ocr-output" id="ocrText"></pre>
+      </div>
+
+      <!-- Keywords -->
+      <div class="info-card">
+        <div class="info-card-head">
+          <i class="fa-solid fa-tags"></i>
+          <div class="info-card-label">Detected Keywords</div>
+        </div>
+        <div class="kw-wrap" id="keywordsWrap"></div>
+      </div>
+
+      <!-- Medicine Cards -->
+      <div class="divider"></div>
+      <div class="section-eyebrow" style="margin-bottom:6px;">Matched Results</div>
+      <div class="med-grid" id="medicineGrid"></div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────── -->
+  <footer>
+    <div class="footer-inner">
+      <div>© 2025 <strong>MediScan</strong> — Medicine Intelligence Platform</div>
+      <div class="footer-disclaimer">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        For informational purposes only. Always consult a qualified healthcare professional.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="fa-solid fa-circle-exclamation"></i>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    // ── Load DB stats ─────────────────────────────────
+    fetch('/dataset-stats')
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('stat-medicines').textContent = d.total_medicines.toLocaleString();
+        document.getElementById('stat-classes').textContent = d.drug_classes.toLocaleString();
+        document.getElementById('db-count').textContent = `${d.total_medicines.toLocaleString()} Medicines Loaded`;
+      })
+      .catch(() => {
+        document.getElementById('db-count').textContent = 'System Ready';
+      });
+
+    // ── File Handling ─────────────────────────────────
+    const imageInput  = document.getElementById('imageInput');
+    const analyzeBtn  = document.getElementById('analyzeBtn');
+    const dropZone    = document.getElementById('dropZone');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg  = document.getElementById('previewImg');
+    const previewName = document.getElementById('previewName');
+    const previewMeta = document.getElementById('previewMeta');
+    const clearBtn    = document.getElementById('clearBtn');
+    let selectedFile  = null;
+
+    imageInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) handleFile(file);
+    });
+
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) handleFile(file);
+    });
+
+    clearBtn.addEventListener('click', () => {
+      selectedFile = null;
+      previewImg.src = '';
+      imagePreview.classList.remove('visible');
+      analyzeBtn.disabled = true;
+      document.getElementById('results').classList.remove('visible');
+      imageInput.value = '';
+    });
+
+    function handleFile(file) {
+      selectedFile = file;
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      previewName.textContent = file.name;
+      const kb = (file.size / 1024).toFixed(1);
+      const mb = (file.size / (1024*1024)).toFixed(2);
+      previewMeta.textContent = `${kb < 1024 ? kb + ' KB' : mb + ' MB'} · ${file.type || 'image'}`;
+      imagePreview.classList.add('visible');
+      analyzeBtn.disabled = false;
+      document.getElementById('results').classList.remove('visible');
+    }
+
+    // ── Analyze ───────────────────────────────────────
+    analyzeBtn.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      analyzeBtn.disabled = true;
+      document.getElementById('loadingOverlay').classList.add('active');
+      document.getElementById('results').classList.remove('visible');
+
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      try {
+        const res = await fetch('/analyze', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        document.getElementById('loadingOverlay').classList.remove('active');
+
+        if (data.error) {
+          showToast(data.error);
+          analyzeBtn.disabled = false;
+          return;
+        }
+
+        renderResults(data);
+      } catch (err) {
+        document.getElementById('loadingOverlay').classList.remove('active');
+        showToast('Server error. Make sure Flask is running on port 5000.');
+        analyzeBtn.disabled = false;
+      }
+
+      analyzeBtn.disabled = false;
+    });
+
+    // ── Render Results ────────────────────────────────
+    function renderResults(data) {
+      document.getElementById('results').classList.add('visible');
+      document.getElementById('ocrText').textContent = data.raw_text || 'No text could be extracted.';
+      const count = data.total_matches || 0;
+      document.getElementById('resultsCount').textContent = `${count} Match${count !== 1 ? 'es' : ''} Found`;
+
+      // Keywords
+      const kwWrap = document.getElementById('keywordsWrap');
+      kwWrap.innerHTML = '';
+      (data.keywords || []).slice(0, 24).forEach(k => {
+        const chip = document.createElement('span');
+        chip.className = 'kw-chip';
+        chip.textContent = k;
+        kwWrap.appendChild(chip);
+      });
+
+      // Cards
+      const grid = document.getElementById('medicineGrid');
+      grid.innerHTML = '';
+
+      if (!data.matches || data.matches.length === 0) {
+        grid.innerHTML = `
+          <div class="no-results-card">
+            <div class="no-results-icon">🔍</div>
+            <div class="no-results-title">No Medicines Found</div>
+            <p class="no-results-desc">We couldn't match any medicine name or composition in the image. Try a clearer, well-lit photo with the label text fully visible.</p>
+          </div>`;
+        return;
+      }
+
+      const maxScore = data.matches[0]?.score || 1;
+
+      data.matches.forEach((m, i) => {
+        const pct = Math.min(100, Math.round((m.score / maxScore) * 100));
+        const rankClass = i === 0 ? '' : i === 1 ? 'second' : i === 2 ? 'third' : '';
+
+        const rx = m.prescription === 'Yes'
+          ? `<span class="rx-pill rx"><i class="fa-solid fa-prescription"></i> Rx Required</span>`
+          : `<span class="rx-pill otc"><i class="fa-solid fa-store"></i> OTC Available</span>`;
+
+        const fields = (m.matched_on || []).map(f => {
+          const cls = f === 'Medicine Name' ? 'name' : f === 'Generic Name' ? 'generic' : f === 'Composition' ? 'composition' : 'class';
+          return `<span class="match-tag ${cls}">${f}</span>`;
+        }).join('');
+
+        const ageLower = (m.age_group || '').toLowerCase();
+        let ageCls = 'adults-children', ageIcon = '👥';
+        if (ageLower.includes('all ages'))           { ageCls = 'all-ages';           ageIcon = '🌍'; }
+        else if (ageLower.includes('adults only'))   { ageCls = 'adults-only';        ageIcon = '🧑'; }
+        else if (ageLower.includes('adolescents'))   { ageCls = 'adults-adolescents'; ageIcon = '🧒'; }
+        else if (ageLower.includes('children only')) { ageCls = 'children-only';      ageIcon = '👶'; }
+
+        const segs = [
+          { label: 'Infants<br/>0–2', key: 0 },
+          { label: 'Children<br/>3–11', key: 3 },
+          { label: 'Teens<br/>12–17', key: 12 },
+          { label: 'Adults<br/>18–59', key: 18 },
+          { label: 'Seniors<br/>60+', key: 60 },
+        ];
+        const minAgeNum = parseInt((m.min_age || '0').replace('+', '')) || 0;
+
+        const stripHTML = segs.map(seg => {
+          let cls = seg.key >= minAgeNum ? 'active' : 'warning';
+          if (ageLower.includes('adults only') && seg.key < 18) cls = 'warning';
+          if (ageLower === 'all ages' || m.min_age === '0+') cls = 'active';
+          return `<div class="strip-seg ${cls}">${seg.label}</div>`;
+        }).join('');
+
+        const card = document.createElement('div');
+        card.className = 'med-card';
+        card.innerHTML = `
+          <div class="med-card-head">
+            <div class="med-rank-info">
+              <div class="rank-badge ${rankClass}">${i + 1}</div>
+              <div class="med-name-block">
+                <div class="med-name">${m.medicine_name}</div>
+                <div class="med-generic">${m.generic_name}</div>
+              </div>
+            </div>
+            <div class="score-block">
+              <div class="score-label-sm">Match Score</div>
+              <div class="score-row">
+                <div class="score-track">
+                  <div class="score-fill" style="width:${pct}%"></div>
+                </div>
+                <div class="score-pct">${pct}%</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="med-card-body">
+            <div class="composition-label">Drug Composition</div>
+            <div class="composition-box">
+              <div class="composition-value">${m.composition}</div>
+            </div>
+
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-label">Drug Class</div>
+                <div class="detail-value">${m.drug_class}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Manufacturer</div>
+                <div class="detail-value">${m.manufacturer}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Dosage Form</div>
+                <div class="detail-value">${m.dosage_form}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Strength</div>
+                <div class="detail-value">${m.strength}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Indicated Uses</div>
+                <div class="detail-value uses">${m.uses}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Side Effects</div>
+                <div class="detail-value side-effects">${m.side_effects}</div>
+              </div>
+            </div>
+
+            <div class="age-panel">
+              <div class="age-panel-title">
+                <i class="fa-solid fa-user-group"></i>
+                Recommended Age Group
+              </div>
+              <div class="age-row">
+                <div class="age-badge ${ageCls}">${ageIcon} ${m.age_group || 'Not specified'}</div>
+                <div class="min-age-tag">
+                  <i class="fa-solid fa-calendar-days" style="color:var(--primary)"></i>
+                  Min Age: <strong>${m.min_age || 'N/A'}</strong>
+                </div>
+              </div>
+              <div class="age-strip">${stripHTML}</div>
+              ${m.age_notes ? `<div class="age-note"><i class="fa-solid fa-circle-info"></i>${m.age_notes}</div>` : ''}
+            </div>
+          </div>
+
+          <div class="med-card-foot">
+            <div class="matched-tags">${fields}</div>
+            ${rx}
+          </div>`;
+
+        grid.appendChild(card);
+      });
+
+      // Scroll to results smoothly
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── Toast ─────────────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4500);
+    }
+  </script>
+</body>
+</html>
