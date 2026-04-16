@@ -4,9 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MediScan — Medicine Analyzer</title>
+  <meta name="description" content="MediScan is an AI-powered medicine identification system. Upload a photo and instantly identify medicines using OCR technology."/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <style>
+    /* ═══════════════════════════════════════════════════════
+       LIGHT THEME (default)
+       ═══════════════════════════════════════════════════════ */
     :root {
       --white: #ffffff;
       --off-white: #f7f9fc;
@@ -36,40 +40,175 @@
       --radius-xl: 28px;
       --font-body: 'Plus Jakarta Sans', sans-serif;
       --font-display: 'Fraunces', serif;
+
+      /* Sidebar */
+      --sidebar-bg: #ffffff;
+      --sidebar-border: var(--gray-100);
+      --sidebar-link: var(--gray-600);
+      --sidebar-link-hover-bg: var(--gray-50);
+      --sidebar-link-active-bg: var(--primary-light);
+      --sidebar-link-active: var(--primary);
+      --sidebar-section-label: var(--gray-400);
+      --sidebar-width: 260px;
+
+      /* Body bg */
+      --body-bg: var(--off-white);
+      --body-bg-image: none;
+
+      /* Cards */
+      --card-bg: #ffffff;
+      --card-border: var(--gray-100);
+      --card-head-bg: var(--gray-50);
+
+      /* Misc */
+      --drop-zone-bg: var(--gray-50);
+      --drop-zone-border: var(--gray-200);
+      --upload-icon-bg: #ffffff;
+      --upload-icon-border: var(--gray-200);
+      --upload-icon-color: var(--primary);
+      --ocr-bg: #fafbfc;
+      --format-chip-bg: #ffffff;
+      --format-chip-border: var(--gray-200);
+      --format-chip-color: var(--gray-600);
+      --tip-bg: var(--gray-50);
+      --tip-border: var(--gray-100);
+      --footer-bg: var(--gray-900);
+      --grid-overlay-opacity: 0;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ═══════════════════════════════════════════════════════
+       DARK THEME
+       ═══════════════════════════════════════════════════════ */
+    html.dark-mode {
+      --white: #0b0f1a;
+      --off-white: #070A12;
+      --gray-50: rgba(255,255,255,.06);
+      --gray-100: rgba(255,255,255,.10);
+      --gray-200: rgba(255,255,255,.16);
+      --gray-400: rgba(235,243,255,.62);
+      --gray-600: rgba(235,243,255,.78);
+      --gray-700: rgba(235,243,255,.88);
+      --gray-900: #eaf1ff;
+      --primary: #7c5cff;
+      --primary-light: rgba(124,92,255,.14);
+      --primary-dark: #5b44d8;
+      --teal: #2ee59d;
+      --teal-light: rgba(46,229,157,.12);
+      --amber: #ffb020;
+      --amber-light: rgba(255,176,32,.14);
+      --red: #ff4d6d;
+      --red-light: rgba(255,77,109,.14);
+      --shadow-sm: 0 8px 26px rgba(0,0,0,.35);
+      --shadow-md: 0 14px 44px rgba(0,0,0,.45);
+      --shadow-lg: 0 24px 72px rgba(0,0,0,.55);
+      --shadow-xl: 0 30px 90px rgba(0,0,0,.60);
 
+      --sidebar-bg: rgba(10,12,22,.85);
+      --sidebar-border: rgba(255,255,255,.10);
+      --sidebar-link: rgba(235,243,255,.72);
+      --sidebar-link-hover-bg: rgba(255,255,255,.06);
+      --sidebar-link-active-bg: rgba(124,92,255,.16);
+      --sidebar-link-active: #dcd5ff;
+      --sidebar-section-label: rgba(235,243,255,.45);
+
+      --body-bg: #070A12;
+      --body-bg-image:
+        radial-gradient(1200px 700px at 15% 12%, rgba(124,92,255,.22), transparent 55%),
+        radial-gradient(1000px 650px at 85% 18%, rgba(46,229,157,.16), transparent 55%),
+        radial-gradient(900px 700px at 55% 92%, rgba(255,176,32,.10), transparent 55%);
+
+      --card-bg: rgba(12,14,26,.55);
+      --card-border: rgba(255,255,255,.10);
+      --card-head-bg: rgba(255,255,255,.04);
+
+      --drop-zone-bg: rgba(255,255,255,.04);
+      --drop-zone-border: rgba(255,255,255,.14);
+      --upload-icon-bg: rgba(255,255,255,.06);
+      --upload-icon-border: rgba(255,255,255,.12);
+      --upload-icon-color: #dcd5ff;
+      --ocr-bg: rgba(0,0,0,.18);
+      --format-chip-bg: rgba(255,255,255,.05);
+      --format-chip-border: rgba(255,255,255,.10);
+      --format-chip-color: rgba(235,243,255,.74);
+      --tip-bg: rgba(255,255,255,.04);
+      --tip-border: rgba(255,255,255,.10);
+      --footer-bg: rgba(8,10,18,.75);
+      --grid-overlay-opacity: 0.55;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--off-white);
+      background-color: var(--body-bg);
+      background-image: var(--body-bg-image);
       color: var(--gray-900);
       font-family: var(--font-body);
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s ease, color 0.3s ease;
     }
 
-    /* ─── TOPBAR ──────────────────────────────────────── */
-    .topbar {
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--gray-100);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 0 40px;
+    /* Grid overlay (dark mode feel) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,1), rgba(0,0,0,.15) 55%, transparent 75%);
+      opacity: var(--grid-overlay-opacity);
+      z-index: 0;
+      transition: opacity 0.4s ease;
     }
 
-    .topbar-inner {
-      max-width: 1240px;
-      margin: 0 auto;
-      height: 68px;
+    /* ═══════════════════════════════════════════════════════
+       APP LAYOUT: Sidebar + Main
+       ═══════════════════════════════════════════════════════ */
+    .app-container {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── SIDEBAR ──────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-width);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      z-index: 200;
+      transition: background 0.4s ease, border-color 0.3s ease, transform 0.3s cubic-bezier(.4,0,.2,1);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    html.dark-mode .sidebar {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+    .sidebar-header {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--sidebar-border);
+      flex-shrink: 0;
     }
 
     .logo {
@@ -92,6 +231,11 @@
       flex-shrink: 0;
     }
 
+    html.dark-mode .logo-mark {
+      background: linear-gradient(135deg, #7c5cff 0%, #a78bfa 100%);
+      box-shadow: 0 4px 12px rgba(124,92,255,0.3);
+    }
+
     .logo-text-wrap { display: flex; flex-direction: column; gap: 1px; }
 
     .logo-name {
@@ -104,7 +248,7 @@
     }
 
     .logo-tagline {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 500;
       color: var(--gray-400);
       text-transform: uppercase;
@@ -112,41 +256,80 @@
       line-height: 1;
     }
 
-    .nav-center {
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    /* Sidebar Nav */
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
     }
 
-    .nav-link {
-      padding: 8px 16px;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--gray-600);
-      text-decoration: none;
-      transition: all 0.18s;
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--sidebar-section-label);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 12px 12px 8px;
     }
 
-    .nav-link:hover { background: var(--gray-50); color: var(--gray-900); }
-    .nav-link.active { background: var(--primary-light); color: var(--primary); }
-
-    .topbar-right {
+    .sidebar-link {
       display: flex;
       align-items: center;
       gap: 12px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sidebar-link);
+      text-decoration: none;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      margin-bottom: 2px;
     }
 
-    .status-pill {
+    .sidebar-link i {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      opacity: 0.7;
+      transition: opacity 0.18s ease;
+    }
+
+    .sidebar-link:hover {
+      background: var(--sidebar-link-hover-bg);
+      color: var(--gray-900);
+    }
+
+    .sidebar-link:hover i { opacity: 1; }
+
+    .sidebar-link.active {
+      background: var(--sidebar-link-active-bg);
+      color: var(--sidebar-link-active);
+      font-weight: 600;
+    }
+
+    .sidebar-link.active i { opacity: 1; color: var(--sidebar-link-active); }
+
+    /* Status pill in sidebar */
+    .sidebar-status {
+      margin: 8px 12px 4px;
+      padding: 10px 14px;
+      background: var(--teal-light);
+      border: 1px solid rgba(12,166,120,0.15);
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
-      gap: 7px;
-      background: var(--teal-light);
-      color: var(--teal);
-      padding: 6px 14px;
-      border-radius: 100px;
-      font-size: 12.5px;
+      gap: 9px;
+      font-size: 12px;
       font-weight: 600;
+      color: var(--teal);
+      transition: background 0.3s, border 0.3s, color 0.3s;
+    }
+
+    html.dark-mode .sidebar-status {
+      background: rgba(46,229,157,.10);
+      border-color: rgba(46,229,157,.18);
+      color: #bff7df;
     }
 
     .status-dot {
@@ -155,6 +338,7 @@
       border-radius: 50%;
       background: var(--teal);
       animation: statusPulse 2.5s ease infinite;
+      flex-shrink: 0;
     }
 
     @keyframes statusPulse {
@@ -162,13 +346,147 @@
       50% { transform: scale(0.75); opacity: 0.6; }
     }
 
-    /* ─── HERO SECTION ────────────────────────────────── */
+    /* Sidebar Footer (theme toggle) */
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--sidebar-border);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      transition: all 0.22s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--sidebar-link-hover-bg);
+      border-color: var(--gray-200);
+    }
+
+    .theme-toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-toggle-label i { font-size: 16px; }
+
+    .toggle-track {
+      width: 44px;
+      height: 24px;
+      background: var(--gray-200);
+      border-radius: 100px;
+      position: relative;
+      transition: background 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .toggle-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1), background 0.3s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    html.dark-mode .toggle-track {
+      background: var(--primary);
+    }
+
+    html.dark-mode .toggle-thumb {
+      transform: translateX(20px);
+      background: #0b0f1a;
+    }
+
+    /* ─── MOBILE SIDEBAR TOGGLE ────────────────────────── */
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 150;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--sidebar-border);
+      padding: 12px 20px;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease;
+    }
+
+    html.dark-mode .mobile-topbar {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .mobile-menu-btn {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius-sm);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--gray-700);
+      transition: all 0.2s;
+    }
+
+    .mobile-menu-btn:hover { background: var(--gray-100); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 190;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .sidebar-overlay.show { display: block; opacity: 1; }
+
+    /* ─── MAIN CONTENT ─────────────────────────────────── */
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.3s ease;
+    }
+
+    /* ─── HERO SECTION ─────────────────────────────────── */
     .hero-section {
       background: linear-gradient(160deg, #f0f6ff 0%, #ffffff 45%, #f0faf6 100%);
       border-bottom: 1px solid var(--gray-100);
-      padding: 72px 40px 64px;
+      padding: 60px 40px 52px;
       position: relative;
       overflow: hidden;
+      transition: background 0.4s ease;
+    }
+
+    html.dark-mode .hero-section {
+      background:
+        radial-gradient(700px 450px at 10% 15%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(650px 420px at 85% 20%, rgba(46,229,157,.14), transparent 60%),
+        rgba(7,10,18,.55);
     }
 
     .hero-section::before {
@@ -189,12 +507,15 @@
       pointer-events: none;
     }
 
+    html.dark-mode .hero-section::before,
+    html.dark-mode .hero-section::after { opacity: 0; }
+
     .hero-inner {
-      max-width: 1240px;
+      max-width: 1100px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 64px;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
       align-items: center;
       position: relative;
       z-index: 2;
@@ -216,14 +537,19 @@
       margin-bottom: 20px;
     }
 
+    html.dark-mode .hero-badge {
+      color: #dcd5ff;
+      border-color: rgba(124,92,255,.20);
+    }
+
     .hero-h1 {
       font-family: var(--font-display);
-      font-size: clamp(34px, 4vw, 52px);
+      font-size: clamp(30px, 3.5vw, 46px);
       font-weight: 700;
       line-height: 1.12;
       letter-spacing: -1.5px;
       color: var(--gray-900);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .hero-h1 em {
@@ -232,17 +558,17 @@
     }
 
     .hero-p {
-      font-size: 16.5px;
+      font-size: 15.5px;
       color: var(--gray-600);
       line-height: 1.75;
       max-width: 520px;
-      margin-bottom: 36px;
+      margin-bottom: 30px;
       font-weight: 400;
     }
 
     .hero-features {
       display: flex;
-      gap: 24px;
+      gap: 20px;
       flex-wrap: wrap;
     }
 
@@ -250,7 +576,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--gray-700);
     }
@@ -267,13 +593,23 @@
       flex-shrink: 0;
     }
 
+    html.dark-mode .feature-check {
+      border: 1px solid rgba(46,229,157,.18);
+    }
+
     /* Stats panel in hero */
     .hero-stats {
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-xl);
-      padding: 32px;
-      border: 1px solid var(--gray-100);
+      padding: 28px;
+      border: 1px solid var(--card-border);
+      transition: background 0.4s, border 0.3s;
+    }
+
+    html.dark-mode .hero-stats {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .hero-stats-title {
@@ -282,14 +618,14 @@
       color: var(--gray-400);
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .stat-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 0;
+      padding: 12px 0;
       border-bottom: 1px solid var(--gray-50);
     }
 
@@ -300,7 +636,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--gray-600);
       font-weight: 500;
     }
@@ -321,16 +657,17 @@
 
     .stat-value-text {
       font-family: var(--font-display);
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--gray-900);
     }
 
-    /* ─── MAIN CONTENT ────────────────────────────────── */
+    /* ─── CONTENT AREA ─────────────────────────────────── */
     .content-area {
-      max-width: 1240px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 56px 40px;
+      padding: 48px 40px;
+      width: 100%;
     }
 
     .section-eyebrow {
@@ -344,33 +681,41 @@
 
     .section-title-lg {
       font-family: var(--font-display);
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       color: var(--gray-900);
       letter-spacing: -0.5px;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
-    /* ─── UPLOAD CARD ─────────────────────────────────── */
+    /* ─── UPLOAD CARD ──────────────────────────────────── */
     .upload-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-md);
-      border: 1px solid var(--gray-100);
+      border: 1px solid var(--card-border);
       overflow: hidden;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      transition: background 0.4s, border 0.3s;
+    }
+
+    html.dark-mode .upload-card {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .upload-card-header {
-      padding: 24px 32px;
-      border-bottom: 1px solid var(--gray-100);
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--card-border);
+      background: var(--card-head-bg);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      transition: background 0.3s, border 0.3s;
     }
 
     .upload-card-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--gray-900);
       display: flex;
@@ -380,17 +725,17 @@
 
     .upload-card-title i { color: var(--primary); }
 
-    .upload-card-body { padding: 32px; }
+    .upload-card-body { padding: 28px; }
 
     .drop-zone {
-      border: 2px dashed var(--gray-200);
+      border: 2px dashed var(--drop-zone-border);
       border-radius: var(--radius-lg);
-      padding: 56px 40px;
+      padding: 48px 36px;
       text-align: center;
       cursor: pointer;
       transition: all 0.25s ease;
       position: relative;
-      background: var(--gray-50);
+      background: var(--drop-zone-bg);
     }
 
     .drop-zone:hover, .drop-zone.dragover {
@@ -405,6 +750,17 @@
       box-shadow: 0 8px 24px rgba(26,110,245,0.35);
     }
 
+    html.dark-mode .drop-zone:hover, html.dark-mode .drop-zone.dragover {
+      background: rgba(124,92,255,.10);
+      border-color: rgba(124,92,255,.45);
+    }
+
+    html.dark-mode .drop-zone:hover .upload-icon-wrap,
+    html.dark-mode .drop-zone.dragover .upload-icon-wrap {
+      background: rgba(124,92,255,.92);
+      box-shadow: 0 14px 44px rgba(124,92,255,.35);
+    }
+
     .drop-zone input[type="file"] {
       position: absolute;
       inset: 0;
@@ -415,31 +771,31 @@
     }
 
     .upload-icon-wrap {
-      width: 72px; height: 72px;
-      background: white;
-      border: 1px solid var(--gray-200);
+      width: 68px; height: 68px;
+      background: var(--upload-icon-bg);
+      border: 1px solid var(--upload-icon-border);
       border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      color: var(--primary);
-      margin: 0 auto 20px;
+      font-size: 26px;
+      color: var(--upload-icon-color);
+      margin: 0 auto 18px;
       transition: all 0.3s ease;
       box-shadow: var(--shadow-sm);
     }
 
     .drop-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--gray-900);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .drop-sub {
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--gray-400);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .drop-formats {
@@ -450,31 +806,32 @@
     }
 
     .format-chip {
-      background: white;
-      border: 1px solid var(--gray-200);
-      color: var(--gray-600);
+      background: var(--format-chip-bg);
+      border: 1px solid var(--format-chip-border);
+      color: var(--format-chip-color);
       padding: 3px 10px;
       border-radius: 6px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
     }
 
     /* Preview */
     .preview-strip {
       display: none;
-      margin-top: 20px;
+      margin-top: 18px;
       background: var(--gray-50);
       border: 1px solid var(--gray-100);
       border-radius: var(--radius);
-      padding: 16px 20px;
+      padding: 14px 18px;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      transition: background 0.3s, border 0.3s;
     }
 
     .preview-strip.visible { display: flex; }
 
     .preview-thumb {
-      width: 80px; height: 80px;
+      width: 72px; height: 72px;
       object-fit: cover;
       border-radius: var(--radius-sm);
       border: 1px solid var(--gray-200);
@@ -486,16 +843,16 @@
 
     .preview-filename {
       font-weight: 700;
-      font-size: 14.5px;
+      font-size: 14px;
       color: var(--gray-900);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .preview-meta-text {
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--gray-400);
       font-weight: 500;
     }
@@ -514,19 +871,19 @@
 
     .preview-clear:hover { background: var(--gray-100); color: var(--red); }
 
-    /* ─── ANALYZE BUTTON ──────────────────────────────── */
+    /* ─── ANALYZE BUTTON ───────────────────────────────── */
     .btn-primary {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       width: 100%;
-      padding: 16px 28px;
-      margin-top: 20px;
+      padding: 15px 28px;
+      margin-top: 18px;
       background: var(--primary);
       color: white;
       font-family: var(--font-body);
-      font-size: 15.5px;
+      font-size: 15px;
       font-weight: 700;
       border: none;
       border-radius: var(--radius);
@@ -551,26 +908,42 @@
       cursor: not-allowed;
     }
 
-    /* ─── TIPS STRIP ──────────────────────────────────── */
+    html.dark-mode .btn-primary {
+      background: linear-gradient(135deg, rgba(124,92,255,.98), rgba(46,229,157,.78));
+      box-shadow: 0 14px 40px rgba(124,92,255,.22);
+    }
+
+    html.dark-mode .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(124,92,255,1), rgba(46,229,157,.92));
+      box-shadow: 0 18px 56px rgba(124,92,255,.28);
+    }
+
+    html.dark-mode .btn-primary:disabled {
+      background: rgba(255,255,255,.10);
+      color: rgba(235,243,255,.45);
+    }
+
+    /* ─── TIPS ──────────────────────────────────────────── */
     .tips-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 24px;
+      gap: 14px;
+      margin-top: 20px;
     }
 
     .tip-item {
-      background: var(--gray-50);
-      border: 1px solid var(--gray-100);
+      background: var(--tip-bg);
+      border: 1px solid var(--tip-border);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 14px;
       display: flex;
       gap: 12px;
       align-items: flex-start;
+      transition: background 0.3s, border 0.3s;
     }
 
     .tip-icon {
-      width: 34px; height: 34px;
+      width: 32px; height: 32px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -583,26 +956,32 @@
     .tip-icon.blue { background: var(--primary-light); color: var(--primary); }
     .tip-icon.amber { background: var(--amber-light); color: var(--amber); }
 
-    .tip-text { font-size: 12.5px; color: var(--gray-600); line-height: 1.55; font-weight: 500; }
-    .tip-text strong { display: block; color: var(--gray-900); margin-bottom: 3px; font-weight: 700; font-size: 13px; }
+    .tip-text { font-size: 12px; color: var(--gray-600); line-height: 1.55; font-weight: 500; }
+    .tip-text strong { display: block; color: var(--gray-900); margin-bottom: 2px; font-weight: 700; font-size: 12.5px; }
 
-    /* ─── LOADING ─────────────────────────────────────── */
+    /* ─── LOADING ──────────────────────────────────────── */
     .loading-card {
       display: none;
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-md);
-      border: 1px solid var(--gray-100);
-      padding: 64px 40px;
+      border: 1px solid var(--card-border);
+      padding: 56px 36px;
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
+      transition: background 0.4s, border 0.3s;
+    }
+
+    html.dark-mode .loading-card {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .loading-card.active { display: block; }
 
     .loading-visual {
-      width: 96px; height: 96px;
-      margin: 0 auto 28px;
+      width: 88px; height: 88px;
+      margin: 0 auto 24px;
       position: relative;
     }
 
@@ -630,28 +1009,28 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
+      font-size: 24px;
     }
 
     @keyframes spinAnim { to { transform: rotate(360deg); } }
 
     .loading-title {
       font-family: var(--font-display);
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: var(--gray-900);
       margin-bottom: 8px;
     }
 
-    .loading-sub { font-size: 14px; color: var(--gray-400); font-weight: 500; }
+    .loading-sub { font-size: 13.5px; color: var(--gray-400); font-weight: 500; }
 
     .progress-track {
       height: 4px;
       background: var(--gray-100);
       border-radius: 100px;
-      margin-top: 28px;
+      margin-top: 24px;
       overflow: hidden;
-      max-width: 320px;
+      max-width: 300px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -669,7 +1048,7 @@
       100% { width: 0%; margin-left: 100%; }
     }
 
-    /* ─── RESULTS SECTION ─────────────────────────────── */
+    /* ─── RESULTS ──────────────────────────────────────── */
     #results { display: none; }
     #results.visible { display: block; }
 
@@ -677,12 +1056,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .results-heading {
       font-family: var(--font-display);
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--gray-900);
       letter-spacing: -0.4px;
@@ -698,23 +1077,36 @@
       font-weight: 700;
     }
 
+    html.dark-mode .results-badge {
+      background: rgba(124,92,255,.12);
+      color: #dcd5ff;
+      border-color: rgba(124,92,255,.20);
+    }
+
     /* OCR Box */
     .info-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
-      border: 1px solid var(--gray-100);
-      margin-bottom: 20px;
+      border: 1px solid var(--card-border);
+      margin-bottom: 18px;
       overflow: hidden;
+      transition: background 0.4s, border 0.3s;
+    }
+
+    html.dark-mode .info-card {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .info-card-head {
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--gray-100);
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       gap: 10px;
-      background: var(--gray-50);
+      background: var(--card-head-bg);
+      transition: background 0.3s;
     }
 
     .info-card-head i { color: var(--primary); font-size: 14px; }
@@ -727,15 +1119,16 @@
     }
 
     .ocr-output {
-      padding: 20px;
+      padding: 18px;
       font-family: 'Courier New', monospace;
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--gray-600);
       white-space: pre-wrap;
-      max-height: 180px;
+      max-height: 160px;
       overflow-y: auto;
       line-height: 1.8;
-      background: #fafbfc;
+      background: var(--ocr-bg);
+      transition: background 0.3s;
     }
 
     .ocr-output::-webkit-scrollbar { width: 5px; }
@@ -744,7 +1137,7 @@
 
     /* Keywords */
     .kw-wrap {
-      padding: 16px 20px;
+      padding: 14px 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -756,24 +1149,35 @@
       border: 1px solid rgba(26,110,245,0.15);
       padding: 4px 12px;
       border-radius: 100px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
     }
 
-    /* ─── MEDICINE CARDS ──────────────────────────────── */
+    html.dark-mode .kw-chip {
+      background: rgba(124,92,255,.12);
+      color: #dcd5ff;
+      border-color: rgba(124,92,255,.22);
+    }
+
+    /* ─── MEDICINE CARDS ───────────────────────────────── */
     .med-grid {
       display: grid;
-      gap: 20px;
+      gap: 18px;
     }
 
     .med-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-sm);
-      border: 1px solid var(--gray-100);
+      border: 1px solid var(--card-border);
       overflow: hidden;
-      transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s;
+      transition: box-shadow 0.25s, transform 0.25s, border-color 0.25s, background 0.4s;
       animation: slideUp 0.4s ease both;
+    }
+
+    html.dark-mode .med-card {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .med-card:hover {
@@ -793,13 +1197,14 @@
     .med-card:nth-child(5) { animation-delay: 0.26s; }
 
     .med-card-head {
-      padding: 20px 24px;
+      padding: 18px 22px;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 16px;
-      border-bottom: 1px solid var(--gray-100);
-      background: linear-gradient(135deg, #fafbfd 0%, white 100%);
+      gap: 14px;
+      border-bottom: 1px solid var(--card-border);
+      background: var(--card-head-bg);
+      transition: background 0.3s;
     }
 
     .med-rank-info {
@@ -809,7 +1214,7 @@
     }
 
     .rank-badge {
-      width: 38px; height: 38px;
+      width: 36px; height: 36px;
       background: var(--primary);
       border-radius: 10px;
       display: flex;
@@ -817,7 +1222,7 @@
       justify-content: center;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 17px;
+      font-size: 16px;
       color: white;
       flex-shrink: 0;
       box-shadow: 0 4px 12px rgba(26,110,245,0.3);
@@ -826,10 +1231,10 @@
     .rank-badge.second { background: #64748b; box-shadow: 0 4px 12px rgba(100,116,139,0.3); }
     .rank-badge.third { background: #b45309; box-shadow: 0 4px 12px rgba(180,83,9,0.3); }
 
-    .med-name-block {}
+    html.dark-mode .rank-badge { background: var(--primary); }
 
     .med-name {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       color: var(--gray-900);
       margin-bottom: 3px;
@@ -837,7 +1242,7 @@
     }
 
     .med-generic {
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--gray-400);
       font-weight: 500;
       font-style: italic;
@@ -847,12 +1252,12 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 5px;
+      gap: 4px;
       flex-shrink: 0;
     }
 
     .score-label-sm {
-      font-size: 10.5px;
+      font-size: 10px;
       color: var(--gray-400);
       text-transform: uppercase;
       letter-spacing: 1.2px;
@@ -866,7 +1271,7 @@
     }
 
     .score-track {
-      width: 72px; height: 5px;
+      width: 64px; height: 5px;
       background: var(--gray-100);
       border-radius: 100px;
       overflow: hidden;
@@ -885,79 +1290,90 @@
       color: var(--teal);
     }
 
-    .med-card-body { padding: 24px; }
+    .med-card-body { padding: 22px; }
 
     /* Composition Block */
     .composition-label {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--gray-400);
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      margin-bottom: 8px;
+      margin-bottom: 7px;
     }
 
     .composition-box {
       background: var(--primary-light);
       border: 1px solid rgba(26,110,245,0.12);
       border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      margin-bottom: 24px;
+      padding: 11px 14px;
+      margin-bottom: 20px;
+    }
+
+    html.dark-mode .composition-box {
+      background: rgba(124,92,255,.10);
+      border-color: rgba(124,92,255,.18);
     }
 
     .composition-value {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--primary-dark);
       font-family: 'Courier New', monospace;
       line-height: 1.6;
     }
 
+    html.dark-mode .composition-value { color: rgba(235,243,255,.88); }
+
     /* Info Grid */
     .detail-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
     }
 
-    .detail-item {}
-
     .detail-label {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--gray-400);
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .detail-value {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--gray-800, #1e3a52);
+      color: var(--gray-700);
       line-height: 1.5;
     }
 
+    html.dark-mode .detail-value { color: rgba(235,243,255,.88); }
+
     .detail-value.uses { color: var(--teal); }
     .detail-value.side-effects { color: var(--amber); }
+
+    html.dark-mode .detail-value.uses { color: #7ef2c2; }
+    html.dark-mode .detail-value.side-effects { color: #ffd18a; }
 
     /* Age Section */
     .age-panel {
       background: var(--gray-50);
       border: 1px solid var(--gray-100);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 18px;
       margin-top: 4px;
+      transition: background 0.3s, border 0.3s;
     }
 
     .age-panel-title {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--gray-400);
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 7px;
@@ -970,7 +1386,7 @@
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .age-badge {
@@ -979,7 +1395,7 @@
       gap: 7px;
       padding: 7px 14px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       border: 1px solid;
     }
@@ -995,25 +1411,26 @@
       align-items: center;
       gap: 7px;
       padding: 7px 14px;
-      background: white;
+      background: var(--card-bg);
       border: 1px solid var(--gray-200);
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--gray-600);
       font-weight: 500;
+      transition: background 0.3s, border 0.3s;
     }
 
     .min-age-tag strong {
       color: var(--gray-900);
       font-family: var(--font-display);
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
     }
 
     /* Age strip */
     .age-strip {
       display: flex;
-      height: 30px;
+      height: 28px;
       border-radius: 8px;
       overflow: hidden;
       gap: 2px;
@@ -1024,7 +1441,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       text-align: center;
       letter-spacing: 0.3px;
@@ -1035,29 +1452,40 @@
     .strip-seg.warning { background: var(--red-light); color: var(--red); }
     .strip-seg.inactive { background: var(--gray-100); color: var(--gray-400); }
 
+    html.dark-mode .strip-seg.active { background: rgba(124,92,255,.92); color: #0b0f1a; }
+    html.dark-mode .strip-seg.warning { background: rgba(255,77,109,.10); color: #ffb3c0; }
+    html.dark-mode .strip-seg.inactive { background: rgba(255,255,255,.06); color: rgba(235,243,255,.45); }
+
     .age-note {
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: white;
+      margin-top: 10px;
+      padding: 9px 12px;
+      background: var(--card-bg);
       border-left: 3px solid var(--primary);
       border-radius: 0 8px 8px 0;
-      font-size: 12.5px;
+      font-size: 12px;
       color: var(--gray-600);
       line-height: 1.55;
+      transition: background 0.3s;
     }
 
     .age-note i { color: var(--primary); margin-right: 5px; }
 
+    html.dark-mode .age-note {
+      background: rgba(255,255,255,.04);
+      border-left-color: rgba(124,92,255,.85);
+    }
+
     /* Card Footer */
     .med-card-foot {
-      padding: 14px 24px;
-      border-top: 1px solid var(--gray-100);
+      padding: 12px 22px;
+      border-top: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 10px;
-      background: var(--gray-50);
+      background: var(--card-head-bg);
+      transition: background 0.3s;
     }
 
     .matched-tags {
@@ -1069,7 +1497,7 @@
     .match-tag {
       padding: 3px 10px;
       border-radius: 6px;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.6px;
@@ -1086,7 +1514,7 @@
       gap: 6px;
       padding: 5px 12px;
       border-radius: 100px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
     }
 
@@ -1095,45 +1523,46 @@
 
     /* No Results */
     .no-results-card {
-      background: white;
+      background: var(--card-bg);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-100);
-      padding: 80px 40px;
+      border: 1px solid var(--card-border);
+      padding: 64px 36px;
       text-align: center;
+      transition: background 0.4s;
     }
 
     .no-results-icon {
-      width: 72px; height: 72px;
+      width: 68px; height: 68px;
       background: var(--gray-50);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
-      margin: 0 auto 20px;
+      font-size: 28px;
+      margin: 0 auto 18px;
     }
 
     .no-results-title {
       font-family: var(--font-display);
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 700;
       color: var(--gray-900);
       margin-bottom: 10px;
     }
 
-    .no-results-desc { font-size: 14.5px; color: var(--gray-400); max-width: 440px; margin: 0 auto; line-height: 1.7; }
+    .no-results-desc { font-size: 14px; color: var(--gray-400); max-width: 420px; margin: 0 auto; line-height: 1.7; }
 
-    /* ─── TOAST ───────────────────────────────────────── */
+    /* ─── TOAST ─────────────────────────────────────────── */
     .toast {
       position: fixed;
       bottom: 28px; right: 28px;
-      background: white;
+      background: var(--card-bg);
       border: 1px solid rgba(230,57,70,0.2);
       border-left: 4px solid var(--red);
       color: var(--gray-700);
       padding: 14px 20px;
       border-radius: var(--radius);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 500;
       display: flex;
       align-items: center;
@@ -1149,19 +1578,23 @@
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast i { color: var(--red); font-size: 15px; flex-shrink: 0; }
 
-    /* ─── FOOTER ──────────────────────────────────────── */
+    /* ─── FOOTER ────────────────────────────────────────── */
     footer {
-      background: var(--gray-900);
+      background: var(--footer-bg);
       color: var(--gray-400);
       text-align: center;
-      padding: 28px 40px;
-      font-size: 13px;
+      padding: 24px 36px;
+      font-size: 12.5px;
+      border-top: 1px solid var(--card-border);
+      transition: background 0.4s;
     }
 
     footer strong { color: white; }
 
+    html.dark-mode footer strong { color: var(--gray-900); }
+
     .footer-inner {
-      max-width: 1240px;
+      max-width: 1100px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -1174,299 +1607,405 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--gray-400);
     }
 
     .footer-disclaimer i { color: var(--amber); }
 
-    /* ─── RESPONSIVE ──────────────────────────────────── */
-    @media (max-width: 900px) {
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--gray-100);
+      margin: 8px 0 18px;
+    }
+
+    /* Better focus styles */
+    :focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+      border-radius: 10px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════ */
+    @media (max-width: 960px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .mobile-topbar {
+        display: flex;
+      }
+
       .hero-inner { grid-template-columns: 1fr; }
       .hero-stats { display: none; }
       .tips-strip { grid-template-columns: 1fr; }
-      .topbar { padding: 0 20px; }
-      .hero-section { padding: 48px 20px 40px; }
-      .content-area { padding: 40px 20px; }
-      .nav-center { display: none; }
+      .hero-section { padding: 40px 20px 36px; }
+      .content-area { padding: 32px 20px; }
       .detail-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 560px) {
       .detail-grid { grid-template-columns: 1fr; }
-      .upload-card-body { padding: 20px; }
-    }
-
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: var(--gray-100);
-      margin: 8px 0 20px;
+      .upload-card-body { padding: 18px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ── TOP NAVIGATION ─────────────────────────────── -->
-  <nav class="topbar">
-    <div class="topbar-inner">
-      <a class="logo" href="#">
-        <div class="logo-mark">💊</div>
-        <div class="logo-text-wrap">
-          <span class="logo-name">MediScan</span>
-          <span class="logo-tagline">Medicine Intelligence</span>
-        </div>
-      </a>
-      <div class="nav-center">
-        <a href="#" class="nav-link active">Analyzer</a>
-        <a href="#" class="nav-link">Database</a>
-        <a href="#" class="nav-link">Documentation</a>
-        <a href="#about" class="nav-link">About</a>
+  <div class="app-container">
+
+    <!-- ═══ SIDEBAR ═══════════════════════════════════ -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a class="logo" href="#">
+          <div class="logo-mark">💊</div>
+          <div class="logo-text-wrap">
+            <span class="logo-name">MediScan</span>
+            <span class="logo-tagline">Medicine Intelligence</span>
+          </div>
+        </a>
       </div>
-      <div class="topbar-right">
-        <div class="status-pill">
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Navigation</div>
+        <a href="#hero" class="sidebar-link active" data-section="hero" id="nav-home">
+          <i class="fa-solid fa-house"></i>
+          Home
+        </a>
+        <a href="#analyzer" class="sidebar-link" data-section="analyzer" id="nav-analyzer">
+          <i class="fa-solid fa-magnifying-glass-plus"></i>
+          Analyzer
+        </a>
+        <a href="#about" class="sidebar-link" data-section="about" id="nav-about">
+          <i class="fa-solid fa-circle-info"></i>
+          About
+        </a>
+        <a href="#database" class="sidebar-link" data-section="database" id="nav-database">
+          <i class="fa-solid fa-database"></i>
+          Database
+        </a>
+
+        <div class="sidebar-section-label" style="margin-top:16px;">Quick Info</div>
+        <div class="sidebar-status">
           <div class="status-dot"></div>
           <span id="db-count">Loading...</span>
         </div>
-      </div>
-    </div>
-  </nav>
+      </nav>
 
-  <!-- ── HERO ───────────────────────────────────────── -->
-  <section class="hero-section">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-badge">
-          <i class="fa-solid fa-microscope"></i>
-          OCR-Powered Analysis
-        </div>
-        <h1 class="hero-h1">Identify Any Medicine<br/>from a <em>Single Photo</em></h1>
-        <p class="hero-p">Upload a photo of any tablet, strip, or syrup label. MediScan extracts the text using Tesseract OCR, then instantly matches it against our comprehensive pharmaceutical database.</p>
-        <div class="hero-features">
-          <div class="hero-feature">
-            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
-            Tesseract OCR v5.3
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" id="themeToggle" type="button" aria-label="Toggle dark/light theme">
+          <span class="theme-toggle-label">
+            <i class="fa-solid fa-sun" id="themeIcon"></i>
+            <span id="themeText">Light Mode</span>
+          </span>
+          <div class="toggle-track">
+            <div class="toggle-thumb"></div>
           </div>
-          <div class="hero-feature">
-            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
-            Pharmaceutical DB
-          </div>
-          <div class="hero-feature">
-            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
-            Age Group Info
-          </div>
-          <div class="hero-feature">
-            <div class="feature-check"><i class="fa-solid fa-check"></i></div>
-            Rx/OTC Classification
-          </div>
-        </div>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stats-title">Database Overview</div>
-        <div class="stat-item">
-          <div class="stat-label-text">
-            <div class="stat-icon-sm blue"><i class="fa-solid fa-pills"></i></div>
-            Medicines
-          </div>
-          <div class="stat-value-text" id="stat-medicines">—</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label-text">
-            <div class="stat-icon-sm teal"><i class="fa-solid fa-flask"></i></div>
-            Drug Classes
-          </div>
-          <div class="stat-value-text" id="stat-classes">—</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-label-text">
-            <div class="stat-icon-sm amber"><i class="fa-solid fa-eye"></i></div>
-            OCR Engine
-          </div>
-          <div class="stat-value-text">5.3</div>
-        </div>
-      </div>
-    </div>
-  </section>
-<!-- ── ABOUT SECTION ─────────────────────────────── -->
-<section class="content-area" id="about">
-  <div class="section-eyebrow">About MediScan</div>
-  <div class="section-title-lg">Intelligent Medicine Recognition Platform</div>
-
-  <div class="info-card">
-    <div class="info-card-head">
-      <i class="fa-solid fa-circle-info"></i>
-      <div class="info-card-label">What is MediScan?</div>
-    </div>
-    <div style="padding:20px; font-size:14.5px; color:var(--gray-600); line-height:1.8;">
-      <strong>MediScan</strong> is an advanced AI-powered medicine identification system that allows users to analyze pharmaceutical products using a single image. By leveraging <strong>Optical Character Recognition (OCR)</strong> technology, MediScan extracts text from medicine packaging and intelligently matches it against a structured pharmaceutical database.
-    </div>
-  </div>
-
-  <div class="info-card">
-    <div class="info-card-head">
-      <i class="fa-solid fa-microchip"></i>
-      <div class="info-card-label">How It Works</div>
-    </div>
-    <div style="padding:20px; font-size:14.5px; color:var(--gray-600); line-height:1.8;">
-      <ul style="padding-left:18px;">
-        <li>📸 Upload an image of a medicine strip, bottle, or label</li>
-        <li>🔍 Extract text using <strong>Tesseract OCR (v5.3)</strong></li>
-        <li>🧠 Process and identify key pharmaceutical terms</li>
-        <li>💊 Match results with a curated medicine database</li>
-        <li>📊 Display ranked matches with detailed drug information</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="info-card">
-    <div class="info-card-head">
-      <i class="fa-solid fa-flask"></i>
-      <div class="info-card-label">Key Features</div>
-    </div>
-    <div class="kw-wrap" style="padding:20px;">
-      <span class="kw-chip">OCR-Based Recognition</span>
-      <span class="kw-chip">Medicine Matching</span>
-      <span class="kw-chip">Drug Composition Insights</span>
-      <span class="kw-chip">Side Effects & Uses</span>
-      <span class="kw-chip">Age Group Recommendations</span>
-      <span class="kw-chip">Prescription Classification (Rx/OTC)</span>
-      <span class="kw-chip">Real-Time Analysis</span>
-    </div>
-  </div>
-
-  <div class="info-card">
-    <div class="info-card-head">
-      <i class="fa-solid fa-shield-heart"></i>
-      <div class="info-card-label">Disclaimer</div>
-    </div>
-    <div style="padding:20px; font-size:14px; color:var(--gray-600); line-height:1.8;">
-      MediScan is designed for informational and educational purposes only. It does not replace professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider before making any medical decisions.
-    </div>
-  </div>
-</section>
-  <!-- ── MAIN CONTENT ───────────────────────────────── -->
-  <main class="content-area">
-
-    <!-- Upload Section -->
-    <div class="section-eyebrow">Step 1 — Upload Image</div>
-    <div class="section-title-lg">Scan Your Medicine</div>
-
-    <div class="upload-card">
-      <div class="upload-card-header">
-        <div class="upload-card-title">
-          <i class="fa-solid fa-image"></i>
-          Image Upload
-        </div>
-        <span style="font-size:12.5px; color:var(--gray-400); font-weight:500;">Max 16 MB per file</span>
-      </div>
-      <div class="upload-card-body">
-        <div class="drop-zone" id="dropZone">
-          <input type="file" id="imageInput" accept="image/*" />
-          <div class="upload-icon-wrap">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-          </div>
-          <div class="drop-title">Drop your medicine image here</div>
-          <div class="drop-sub">or click to browse from your device</div>
-          <div class="drop-formats">
-            <span class="format-chip">JPG</span>
-            <span class="format-chip">PNG</span>
-            <span class="format-chip">JPEG</span>
-            <span class="format-chip">BMP</span>
-            <span class="format-chip">TIFF</span>
-            <span class="format-chip">WEBP</span>
-          </div>
-        </div>
-
-        <div class="preview-strip" id="imagePreview">
-          <img src="" alt="Preview" class="preview-thumb" id="previewImg"/>
-          <div class="preview-details">
-            <div class="preview-filename" id="previewName"></div>
-            <div class="preview-meta-text" id="previewMeta"></div>
-          </div>
-          <button class="preview-clear" id="clearBtn" title="Remove image">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <button class="btn-primary" id="analyzeBtn" disabled>
-          <i class="fa-solid fa-magnifying-glass-plus"></i>
-          Analyze Medicine
         </button>
+      </div>
+    </aside>
 
-        <div class="tips-strip">
-          <div class="tip-item">
-            <div class="tip-icon green"><i class="fa-solid fa-sun"></i></div>
-            <div class="tip-text"><strong>Good Lighting</strong>Photograph in bright, even light to improve text clarity.</div>
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ═══ MAIN CONTENT ═════════════════════════════ -->
+    <div class="main-content">
+
+      <!-- Mobile top bar -->
+      <div class="mobile-topbar">
+        <a class="logo" href="#">
+          <div class="logo-mark">💊</div>
+          <div class="logo-text-wrap">
+            <span class="logo-name">MediScan</span>
+            <span class="logo-tagline">Medicine Intelligence</span>
           </div>
-          <div class="tip-item">
-            <div class="tip-icon blue"><i class="fa-solid fa-camera"></i></div>
-            <div class="tip-text"><strong>Fill the Frame</strong>Get close so the label text fills most of the image.</div>
+        </a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+
+      <!-- ── HERO ──────────────────────────────────── -->
+      <section class="hero-section" id="hero">
+        <div class="hero-inner">
+          <div class="hero-left">
+            <div class="hero-badge">
+              <i class="fa-solid fa-microscope"></i>
+              OCR-Powered Analysis
+            </div>
+            <h1 class="hero-h1">Identify Any Medicine<br/>from a <em>Single Photo</em></h1>
+            <p class="hero-p">Upload a photo of any tablet, strip, or syrup label. MediScan extracts the text using Tesseract OCR, then instantly matches it against our comprehensive pharmaceutical database.</p>
+            <div class="hero-features">
+              <div class="hero-feature">
+                <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+                Tesseract OCR v5.3
+              </div>
+              <div class="hero-feature">
+                <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+                Pharmaceutical DB
+              </div>
+              <div class="hero-feature">
+                <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+                Age Group Info
+              </div>
+              <div class="hero-feature">
+                <div class="feature-check"><i class="fa-solid fa-check"></i></div>
+                Rx/OTC Classification
+              </div>
+            </div>
           </div>
-          <div class="tip-item">
-            <div class="tip-icon amber"><i class="fa-solid fa-arrows-to-dot"></i></div>
-            <div class="tip-text"><strong>Avoid Blur</strong>Hold steady or use a flat surface to prevent blurring.</div>
+          <div class="hero-stats">
+            <div class="hero-stats-title">Database Overview</div>
+            <div class="stat-item">
+              <div class="stat-label-text">
+                <div class="stat-icon-sm blue"><i class="fa-solid fa-pills"></i></div>
+                Medicines
+              </div>
+              <div class="stat-value-text" id="stat-medicines">—</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label-text">
+                <div class="stat-icon-sm teal"><i class="fa-solid fa-flask"></i></div>
+                Drug Classes
+              </div>
+              <div class="stat-value-text" id="stat-classes">—</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label-text">
+                <div class="stat-icon-sm amber"><i class="fa-solid fa-eye"></i></div>
+                OCR Engine
+              </div>
+              <div class="stat-value-text">5.3</div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- Loading -->
-    <div class="loading-card" id="loadingOverlay">
-      <div class="loading-visual">
-        <div class="spin-track"></div>
-        <div class="spin-track"></div>
-        <div class="spin-inner">🔬</div>
-      </div>
-      <div class="loading-title">Analyzing Medicine...</div>
-      <div class="loading-sub">Extracting text with Tesseract OCR and matching against database</div>
-      <div class="progress-track">
-        <div class="progress-bar"></div>
-      </div>
-    </div>
+      <!-- ── ABOUT SECTION ─────────────────────────── -->
+      <section class="content-area" id="about">
+        <div class="section-eyebrow">About MediScan</div>
+        <div class="section-title-lg">Intelligent Medicine Recognition Platform</div>
 
-    <!-- Results -->
-    <div id="results">
-      <div class="results-topbar">
-        <div class="results-heading">Analysis Results</div>
-        <div class="results-badge" id="resultsCount"></div>
-      </div>
-
-      <!-- OCR Output -->
-      <div class="info-card">
-        <div class="info-card-head">
-          <i class="fa-solid fa-file-lines"></i>
-          <div class="info-card-label">Extracted Text (OCR Output)</div>
+        <div class="info-card">
+          <div class="info-card-head">
+            <i class="fa-solid fa-circle-info"></i>
+            <div class="info-card-label">What is MediScan?</div>
+          </div>
+          <div style="padding:18px; font-size:14px; color:var(--gray-600); line-height:1.8;">
+            <strong>MediScan</strong> is an advanced AI-powered medicine identification system that allows users to analyze pharmaceutical products using a single image. By leveraging <strong>Optical Character Recognition (OCR)</strong> technology, MediScan extracts text from medicine packaging and intelligently matches it against a structured pharmaceutical database.
+          </div>
         </div>
-        <pre class="ocr-output" id="ocrText"></pre>
-      </div>
 
-      <!-- Keywords -->
-      <div class="info-card">
-        <div class="info-card-head">
-          <i class="fa-solid fa-tags"></i>
-          <div class="info-card-label">Detected Keywords</div>
+        <div class="info-card">
+          <div class="info-card-head">
+            <i class="fa-solid fa-microchip"></i>
+            <div class="info-card-label">How It Works</div>
+          </div>
+          <div style="padding:18px; font-size:14px; color:var(--gray-600); line-height:1.8;">
+            <ul style="padding-left:18px;">
+              <li>📸 Upload an image of a medicine strip, bottle, or label</li>
+              <li>🔍 Extract text using <strong>Tesseract OCR (v5.3)</strong></li>
+              <li>🧠 Process and identify key pharmaceutical terms</li>
+              <li>💊 Match results with a curated medicine database</li>
+              <li>📊 Display ranked matches with detailed drug information</li>
+            </ul>
+          </div>
         </div>
-        <div class="kw-wrap" id="keywordsWrap"></div>
-      </div>
 
-      <!-- Medicine Cards -->
-      <div class="divider"></div>
-      <div class="section-eyebrow" style="margin-bottom:6px;">Matched Results</div>
-      <div class="med-grid" id="medicineGrid"></div>
-    </div>
+        <div class="info-card">
+          <div class="info-card-head">
+            <i class="fa-solid fa-flask"></i>
+            <div class="info-card-label">Key Features</div>
+          </div>
+          <div class="kw-wrap" style="padding:18px;">
+            <span class="kw-chip">OCR-Based Recognition</span>
+            <span class="kw-chip">Medicine Matching</span>
+            <span class="kw-chip">Drug Composition Insights</span>
+            <span class="kw-chip">Side Effects &amp; Uses</span>
+            <span class="kw-chip">Age Group Recommendations</span>
+            <span class="kw-chip">Prescription Classification (Rx/OTC)</span>
+            <span class="kw-chip">Real-Time Analysis</span>
+          </div>
+        </div>
 
-  </main>
+        <div class="info-card">
+          <div class="info-card-head">
+            <i class="fa-solid fa-shield-heart"></i>
+            <div class="info-card-label">Disclaimer</div>
+          </div>
+          <div style="padding:18px; font-size:13.5px; color:var(--gray-600); line-height:1.8;">
+            MediScan is designed for informational and educational purposes only. It does not replace professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider before making any medical decisions.
+          </div>
+        </div>
+      </section>
 
-  <!-- ── FOOTER ─────────────────────────────────────── -->
-  <footer>
-    <div class="footer-inner">
-      <div>© 2025 <strong>MediScan</strong> — Medicine Intelligence Platform</div>
-      <div class="footer-disclaimer">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-        For informational purposes only. Always consult a qualified healthcare professional.
-      </div>
-    </div>
-  </footer>
+      <!-- ── DATABASE SECTION ──────────────────────── -->
+      <section class="content-area" id="database" style="padding-top:0;">
+        <div class="section-eyebrow">Database</div>
+        <div class="section-title-lg">Pharmaceutical Database Stats</div>
+
+        <div class="info-card">
+          <div class="info-card-head">
+            <i class="fa-solid fa-chart-bar"></i>
+            <div class="info-card-label">Current Dataset</div>
+          </div>
+          <div style="padding:20px;">
+            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:16px;">
+              <div>
+                <div class="detail-label">Total Medicines</div>
+                <div class="detail-value" id="db-stat-medicines" style="font-size:22px; font-family:var(--font-display);">—</div>
+              </div>
+              <div>
+                <div class="detail-label">Drug Classes</div>
+                <div class="detail-value" id="db-stat-classes" style="font-size:22px; font-family:var(--font-display);">—</div>
+              </div>
+              <div>
+                <div class="detail-label">Manufacturers</div>
+                <div class="detail-value" id="db-stat-manufacturers" style="font-size:22px; font-family:var(--font-display);">—</div>
+              </div>
+              <div>
+                <div class="detail-label">Dosage Forms</div>
+                <div class="detail-value" id="db-stat-forms" style="font-size:14px;">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ANALYZER SECTION ──────────────────────── -->
+      <section class="content-area" id="analyzer" style="padding-top:0;">
+        <div class="section-eyebrow">Step 1 — Upload Image</div>
+        <div class="section-title-lg">Scan Your Medicine</div>
+
+        <div class="upload-card">
+          <div class="upload-card-header">
+            <div class="upload-card-title">
+              <i class="fa-solid fa-image"></i>
+              Image Upload
+            </div>
+            <span style="font-size:12px; color:var(--gray-400); font-weight:500;">Max 16 MB per file</span>
+          </div>
+          <div class="upload-card-body">
+            <div class="drop-zone" id="dropZone">
+              <input type="file" id="imageInput" accept="image/*" />
+              <div class="upload-icon-wrap">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <div class="drop-title">Drop your medicine image here</div>
+              <div class="drop-sub">or click to browse from your device</div>
+              <div class="drop-formats">
+                <span class="format-chip">JPG</span>
+                <span class="format-chip">PNG</span>
+                <span class="format-chip">JPEG</span>
+                <span class="format-chip">BMP</span>
+                <span class="format-chip">TIFF</span>
+                <span class="format-chip">WEBP</span>
+              </div>
+            </div>
+
+            <div class="preview-strip" id="imagePreview">
+              <img src="" alt="Preview" class="preview-thumb" id="previewImg"/>
+              <div class="preview-details">
+                <div class="preview-filename" id="previewName"></div>
+                <div class="preview-meta-text" id="previewMeta"></div>
+              </div>
+              <button class="preview-clear" id="clearBtn" title="Remove image">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <button class="btn-primary" id="analyzeBtn" disabled>
+              <i class="fa-solid fa-magnifying-glass-plus"></i>
+              Analyze Medicine
+            </button>
+
+            <div class="tips-strip">
+              <div class="tip-item">
+                <div class="tip-icon green"><i class="fa-solid fa-sun"></i></div>
+                <div class="tip-text"><strong>Good Lighting</strong>Photograph in bright, even light to improve text clarity.</div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-icon blue"><i class="fa-solid fa-camera"></i></div>
+                <div class="tip-text"><strong>Fill the Frame</strong>Get close so the label text fills most of the image.</div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-icon amber"><i class="fa-solid fa-arrows-to-dot"></i></div>
+                <div class="tip-text"><strong>Avoid Blur</strong>Hold steady or use a flat surface to prevent blurring.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-card" id="loadingOverlay">
+          <div class="loading-visual">
+            <div class="spin-track"></div>
+            <div class="spin-track"></div>
+            <div class="spin-inner">🔬</div>
+          </div>
+          <div class="loading-title">Analyzing Medicine...</div>
+          <div class="loading-sub">Extracting text with Tesseract OCR and matching against database</div>
+          <div class="progress-track">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results">
+          <div class="results-topbar">
+            <div class="results-heading">Analysis Results</div>
+            <div class="results-badge" id="resultsCount"></div>
+          </div>
+
+          <!-- OCR Output -->
+          <div class="info-card">
+            <div class="info-card-head">
+              <i class="fa-solid fa-file-lines"></i>
+              <div class="info-card-label">Extracted Text (OCR Output)</div>
+            </div>
+            <pre class="ocr-output" id="ocrText"></pre>
+          </div>
+
+          <!-- Keywords -->
+          <div class="info-card">
+            <div class="info-card-head">
+              <i class="fa-solid fa-tags"></i>
+              <div class="info-card-label">Detected Keywords</div>
+            </div>
+            <div class="kw-wrap" id="keywordsWrap"></div>
+          </div>
+
+          <!-- Medicine Cards -->
+          <div class="divider"></div>
+          <div class="section-eyebrow" style="margin-bottom:6px;">Matched Results</div>
+          <div class="med-grid" id="medicineGrid"></div>
+        </div>
+      </section>
+
+      <!-- ── FOOTER ────────────────────────────────── -->
+      <footer>
+        <div class="footer-inner">
+          <div>© 2025 <strong>MediScan</strong> — Medicine Intelligence Platform</div>
+          <div class="footer-disclaimer">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            For informational purposes only. Always consult a qualified healthcare professional.
+          </div>
+        </div>
+      </footer>
+
+    </div><!-- /.main-content -->
+  </div><!-- /.app-container -->
 
   <!-- Toast -->
   <div class="toast" id="toast">
@@ -1475,19 +2014,139 @@
   </div>
 
   <script>
-    // ── Load DB stats ─────────────────────────────────
+    // ═══════════════════════════════════════════════════
+    // THEME TOGGLE
+    // ═══════════════════════════════════════════════════
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+
+    function applyTheme(dark) {
+      if (dark) {
+        document.documentElement.classList.add('dark-mode');
+        themeIcon.className = 'fa-solid fa-moon';
+        themeText.textContent = 'Dark Mode';
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        themeIcon.className = 'fa-solid fa-sun';
+        themeText.textContent = 'Light Mode';
+      }
+    }
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('mediscan-theme');
+    if (savedTheme === 'dark') {
+      applyTheme(true);
+    } else if (savedTheme === 'light') {
+      applyTheme(false);
+    } else {
+      // Default to dark for the premium look
+      applyTheme(true);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark-mode');
+      applyTheme(!isDark);
+      localStorage.setItem('mediscan-theme', isDark ? 'light' : 'dark');
+    });
+
+    // ═══════════════════════════════════════════════════
+    // SIDEBAR NAV
+    // ═══════════════════════════════════════════════════
+    const sidebarLinks = document.querySelectorAll('.sidebar-link[data-section]');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Set active
+        sidebarLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        // Scroll to section
+        const sectionId = link.getAttribute('data-section');
+        const section = document.getElementById(sectionId);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Close mobile sidebar
+        closeMobileSidebar();
+      });
+    });
+
+    // Mobile sidebar
+    function openMobileSidebar() {
+      sidebar.classList.add('open');
+      sidebarOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileSidebar() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    mobileMenuBtn.addEventListener('click', openMobileSidebar);
+    sidebarOverlay.addEventListener('click', closeMobileSidebar);
+
+    // Highlight active sidebar link based on scroll
+    const sections = document.querySelectorAll('[id]');
+    const sectionMap = {};
+    sidebarLinks.forEach(l => {
+      sectionMap[l.getAttribute('data-section')] = l;
+    });
+
+    let scrollTimer;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        let current = '';
+        const scrollTop = (document.querySelector('.main-content') || window).scrollTop || window.scrollY;
+        sidebarLinks.forEach(link => {
+          const sectionId = link.getAttribute('data-section');
+          const el = document.getElementById(sectionId);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= 200) {
+              current = sectionId;
+            }
+          }
+        });
+        if (current && sectionMap[current]) {
+          sidebarLinks.forEach(l => l.classList.remove('active'));
+          sectionMap[current].classList.add('active');
+        }
+      }, 80);
+    }, { passive: true });
+
+    // ═══════════════════════════════════════════════════
+    // LOAD DB STATS
+    // ═══════════════════════════════════════════════════
     fetch('/dataset-stats')
       .then(r => r.json())
       .then(d => {
         document.getElementById('stat-medicines').textContent = d.total_medicines.toLocaleString();
         document.getElementById('stat-classes').textContent = d.drug_classes.toLocaleString();
         document.getElementById('db-count').textContent = `${d.total_medicines.toLocaleString()} Medicines Loaded`;
+
+        // Database section stats
+        document.getElementById('db-stat-medicines').textContent = d.total_medicines.toLocaleString();
+        document.getElementById('db-stat-classes').textContent = d.drug_classes.toLocaleString();
+        document.getElementById('db-stat-manufacturers').textContent = d.manufacturers.toLocaleString();
+        const formsList = (d.dosage_forms || []).join(', ');
+        document.getElementById('db-stat-forms').textContent = formsList || '—';
       })
       .catch(() => {
         document.getElementById('db-count').textContent = 'System Ready';
       });
 
-    // ── File Handling ─────────────────────────────────
+    // ═══════════════════════════════════════════════════
+    // FILE HANDLING
+    // ═══════════════════════════════════════════════════
     const imageInput  = document.getElementById('imageInput');
     const analyzeBtn  = document.getElementById('analyzeBtn');
     const dropZone    = document.getElementById('dropZone');
@@ -1539,7 +2198,9 @@
       document.getElementById('results').classList.remove('visible');
     }
 
-    // ── Analyze ───────────────────────────────────────
+    // ═══════════════════════════════════════════════════
+    // ANALYZE
+    // ═══════════════════════════════════════════════════
     analyzeBtn.addEventListener('click', async () => {
       if (!selectedFile) return;
 
@@ -1572,7 +2233,9 @@
       analyzeBtn.disabled = false;
     });
 
-    // ── Render Results ────────────────────────────────
+    // ═══════════════════════════════════════════════════
+    // RENDER RESULTS
+    // ═══════════════════════════════════════════════════
     function renderResults(data) {
       document.getElementById('results').classList.add('visible');
       document.getElementById('ocrText').textContent = data.raw_text || 'No text could be extracted.';
@@ -1725,7 +2388,9 @@
       document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // ── Toast ─────────────────────────────────────────
+    // ═══════════════════════════════════════════════════
+    // TOAST
+    // ═══════════════════════════════════════════════════
     function showToast(msg) {
       const t = document.getElementById('toast');
       document.getElementById('toastMsg').textContent = msg;
